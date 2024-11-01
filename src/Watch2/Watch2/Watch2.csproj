@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
+  </ItemGroup>
+	<PropertyGroup>
+		<Version>8.2024.1101.508</Version>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>watch2</ToolCommandName>
+		<Authors>Andrei Ignat</Authors>
+		<Description>dotnet watch on steroids</Description>
+		<Title>watch2</Title>
+		<PackageTags>C#;.NET;.NET Core;Analyzer;</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>ico.png</PackageIcon>
+		<RepositoryUrl>https://github.com/ignatandrei/watch2</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/ignatandrei/watch2</PackageProjectUrl>
+		<RepositoryType>GIT</RepositoryType>
+		<Copyright>MIT</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>true</IncludeSymbols>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<Deterministic>true</Deterministic>
+		<DebugType>embedded</DebugType>
+
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+	<PropertyGroup>
+
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GX</CompilerGeneratedFilesOutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\..\README.md" Link="README.md" Pack="true" PackagePath="\" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+		<None Include="..\..\..\docs\ico.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	</Project>
