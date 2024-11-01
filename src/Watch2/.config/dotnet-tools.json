@@ -2,10 +2,10 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "watch2": {
-      "version": "8.2024.1101.508",
+    "netpackageanalyzerconsole": {
+      "version": "8.2024.1025.925",
       "commands": [
-        "watch2"
+        "PackageAnalyzer"
       ],
       "rollForward": false
     }
