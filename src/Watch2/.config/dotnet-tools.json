@@ -15,6 +15,13 @@
         "r"
       ],
       "rollForward": false
+    },
+    "watch2": {
+      "version": "8.2024.1102.950",
+      "commands": [
+        "watch2"
+      ],
+      "rollForward": false
     }
   }
 }

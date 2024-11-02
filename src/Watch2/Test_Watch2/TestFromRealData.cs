@@ -35,7 +35,9 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
         var mockConsole = new IConsoleWrapperCreateExpectations();
         
         mockProcess.Methods.Kill().ExpectedCallCount(1);
+        
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
+            
         var mockConsoleInstance = mockConsole.Instance();
         var p = (new ProcessManager());
         for (var i = 0; i < lines.Length; i++)
@@ -47,6 +49,5 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
         
         // Assert
         mockProcess.Verify();
-
     }
 }

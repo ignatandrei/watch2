@@ -27,5 +27,7 @@ public class ProcessWrapper : IProcessWrapper
     public void BeginOutputReadLine() => _process.BeginOutputReadLine();
     public void BeginErrorReadLine() => _process.BeginErrorReadLine();
     public Task WaitForExitAsync() => _process.WaitForExitAsync();
+
+    public bool HasExited => _process.HasExited;
 }
 
