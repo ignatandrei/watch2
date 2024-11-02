@@ -24,11 +24,13 @@ jobs:
       run: |
         dotnet tool install --global PowerShell
         cd src 
-        cd watch2
+        cd Watch2
         dotnet restore
+        
     - name: Build
       run: |
-        cd watch2
+        cd src
+        cd Watch2
         dotnet tool restore
         dotnet r pack
 
@@ -48,5 +50,5 @@ jobs:
         echo '2'
         cd src
         cd nugetPackages
-        dotnet nuget push "*.symbols.nupkg" --api-key  ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+        dotnet nuget push "*.symbols.nupkg" --api-key  ${{ secrets.  }} --source https://api.nuget.org/v3/index.json
     
