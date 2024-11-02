@@ -8,9 +8,11 @@
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
   </PropertyGroup>
+	<PropertyGroup>
+		<Version>8.2024.1102.950</Version>
+	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>8.2024.1101.508</Version>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>watch2</ToolCommandName>
 		<Authors>Andrei Ignat</Authors>
