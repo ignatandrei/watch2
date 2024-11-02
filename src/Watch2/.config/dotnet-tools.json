@@ -8,6 +8,13 @@
         "PackageAnalyzer"
       ],
       "rollForward": false
+    },
+    "run-script": {
+      "version": "0.6.0",
+      "commands": [
+        "r"
+      ],
+      "rollForward": false
     }
   }
 }

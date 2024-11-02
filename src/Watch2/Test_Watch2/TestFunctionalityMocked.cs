@@ -3,7 +3,6 @@
 namespace Test_Watch2;
 
 [TestClass]
-[DoNotParallelize]
 public sealed class TestFunctionalityMocked
 {
     
@@ -35,7 +34,7 @@ public sealed class TestFunctionalityMocked
         var mockConsole = new IConsoleWrapperCreateExpectations();
         var mockDataReceivedEventArgs = new IDataReceivedEventArgsMakeExpectations();
         mockConsole.Methods.Clear().ExpectedCallCount(1);
-        mockConsole.Methods.WriteLine(Rocks.Arg.Any<string>()).Callback(it => { });
+        mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
         // Act
         (new ProcessManager()).HandleOutput("dotnet watch Started", mockConsole.Instance());
 

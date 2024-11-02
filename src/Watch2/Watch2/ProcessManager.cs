@@ -4,24 +4,13 @@ public class ProcessManager
     private IProcessWrapper? _proc = null;
     private bool _shouldWait = false;
 
-    public async Task StartProcessAsync(string[] args, IConsoleWrapper console)
+    public async Task StartProcessAsync(string[] args, IConsoleWrapper console, IProcessStartInfo startInfo)
     {
         Console.CancelKeyPress += (sender, e) => Kill(_proc);
 
         while (true)
         {
-            IProcessStartInfo startInfo = new ProcessStartInfoWrapper
-            {
-                FileName = "dotnet",
-                Arguments = "watch " + string.Join(' ', args),
-                WorkingDirectory = Environment.CurrentDirectory,
-                RedirectStandardOutput = true,
-                RedirectStandardInput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
+            
             _proc = new ProcessWrapper(startInfo);
             _proc.OutputDataReceived += (sender, e) => HandleOutput(new DataReceivedEventArgsWrapper(e).Data, console);
             _proc.ErrorDataReceived += (sender, e) => HandleError(new DataReceivedEventArgsWrapper(e), console);

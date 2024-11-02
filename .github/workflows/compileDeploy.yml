@@ -1,37 +1,52 @@
-name: .NET
+name: compile and deploy with tag v*
 
 on:
   push:
-    tags:
-      - "vRelease*"
-  workflow_dispatch:
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
+    branches: [ "main" ]
+    tags: [ 'v*' ] # Listen for tag pushes that match version tags
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: windows-latest
-    # runs-on: ubuntu-latest
+    # runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: Setup .NET 8
+    
+    - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-    
-    - name: test run
+
+    - name: Restore dependencies
       run: |
+        dotnet tool install --global PowerShell
         cd src 
-        cd Watch2
+        cd watch2
         dotnet restore
-        dotnet build 
-        
-        
+    - name: Build
+      run: |
+        cd watch2
+        dotnet tool restore
+        dotnet r pack
+
+    - name: 'Upload nuget'
+      uses: actions/upload-artifact@v4
+      with:
+        name: Nuget_${{github.run_number}}
+        path: src/nugetPackages
+        retention-days: 1
+  
+    - name: push to nuget
+      if: startsWith(github.ref, 'refs/tags/v') # This line ensures the step runs only if a tag version is present
+      run: |
+        dir src/nugetPackages/*.*
+        echo '1'
+        dir src/nugetPackages/*.symbols.nupkg  
+        echo '2'
+        cd src
+        cd nugetPackages
+        dotnet nuget push "*.symbols.nupkg" --api-key  ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
     
