@@ -16,6 +16,10 @@ public sealed class TestFunctionalityMocked
         var mockOptions=new Ioptions_gen_jsonCreateExpectations();
         mockProcess.Methods.Kill().ExpectedCallCount(1);
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
+        mockConsole.Methods.MarkupLineInterpolated(Arg.Any<FormattableString>()).Callback(it => { });
+
+        mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
+        mockOptions.Properties.Getters.TimeOut().ExpectedCallCount(1).ReturnValue(1_000);
 
         Func<IProcessStartInfo, IProcessWrapper> f = (it => new ProcessWrapper(it));
         var prc = (new ProcessManager(f, NullLogger<ProcessManager>.Instance, mockOptions.Instance()));
@@ -38,6 +42,10 @@ public sealed class TestFunctionalityMocked
         var mockOptions = new Ioptions_gen_jsonCreateExpectations();
         mockProcess.Methods.Kill().ExpectedCallCount ( 1);
         mockConsole.Methods.WriteLine(Rocks.Arg.Any<string>()).Callback(it=> { });
+        mockConsole.Methods.MarkupLineInterpolated(Arg.Any<FormattableString>()).Callback(it => { });
+
+        mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
+        mockOptions.Properties.Getters.TimeOut().ExpectedCallCount(1).ReturnValue(1_000);
 
         Func<IProcessStartInfo, IProcessWrapper> f = (it => new ProcessWrapper(it));
         var prc = (new ProcessManager(f, NullLogger<ProcessManager>.Instance,mockOptions.Instance()));
@@ -59,8 +67,11 @@ public sealed class TestFunctionalityMocked
         var mockDataReceivedEventArgs = new IDataReceivedEventArgsMakeExpectations();
         var mockOptions = new Ioptions_gen_jsonCreateExpectations();
         mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
+        mockOptions.Properties.Getters.TimeOut().ExpectedCallCount(1).ReturnValue(1_000);
         mockConsole.Methods.Clear().ExpectedCallCount(1);
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
+        //mockConsole.Methods.MarkupLineInterpolated(Arg.Any<FormattableString>()).Callback(it => { });
+
         // Act
         Func<IProcessStartInfo, IProcessWrapper> f = (it => new ProcessWrapper(it));
         var prc = (new ProcessManager(f, NullLogger<ProcessManager>.Instance,mockOptions.Instance()));
