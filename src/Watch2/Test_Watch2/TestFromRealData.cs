@@ -1,6 +1,4 @@
-﻿using Watch2;
-
-namespace Test_Watch2;
+﻿namespace Test_Watch2;
 [TestClass]
 
 public class TestFromRealData
@@ -32,12 +30,22 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
         var lines = outputString.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
         var mockProcess = new IProcessWrapperCreateExpectations();
+        //mockProcess.AddRaiseEvent(
+        //    new RaiseEventInformation("OutputDataReceived", );
+        //    )
         var mockConsole = new IConsoleWrapperCreateExpectations();
-        
+        var mockOptions = new Ioptions_gen_jsonCreateExpectations();
+        mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
+        mockOptions.Properties.Getters.TimeOut().ExpectedCallCount(1).ReturnValue(1_000);
+
         mockProcess.Methods.Kill().ExpectedCallCount(1);
+        
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
+        mockConsole.Methods.MarkupLineInterpolated(Arg.Any<FormattableString>()).Callback(it => { });
+
         var mockConsoleInstance = mockConsole.Instance();
-        var p = (new ProcessManager());
+        Func<IProcessStartInfo, IProcessWrapper> f = (it => mockProcess.Instance());
+        var p = (new ProcessManager(f, NullLogger<ProcessManager>.Instance,mockOptions.Instance()));
         for (var i = 0; i < lines.Length; i++)
         {
             
@@ -47,6 +55,5 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
         
         // Assert
         mockProcess.Verify();
-
     }
 }

@@ -1,17 +1,42 @@
 ﻿namespace Watch2;
 public class ProcessManager
 {
+    public ProcessManager(Func<IProcessStartInfo,IProcessWrapper> ctorProcessWrapper,ILogger<ProcessManager> logger,
+                Ioptions_gen_json options
+        )
+    {
+        this.ctorProcessWrapper = ctorProcessWrapper;
+        this.logger = logger;
+        this.options = options;
+    }
     private IProcessWrapper? _proc = null;
     private bool _shouldWait = false;
+    private readonly Func<IProcessStartInfo, IProcessWrapper> ctorProcessWrapper;
+    private readonly ILogger<ProcessManager> logger;
+    private readonly Ioptions_gen_json options;
 
-    public async Task StartProcessAsync(string[] args, IConsoleWrapper console, IProcessStartInfo startInfo)
+    public bool IsKilledByThisSoftware { get; private set; } =false;
+    public async Task StartProcessAsync(string[] args, 
+        IConsoleWrapper console, 
+        IProcessStartInfo startInfo
+        )
     {
+        
+        var valid= options.Validate(new(this)).ToArray();
+        if(valid.Length > 0)
+        {
+            foreach (var item in valid)
+            {
+                console.MarkupLineInterpolated($"[bold red]{item.ErrorMessage}[/]");
+            }
+            return;
+        }
         Console.CancelKeyPress += (sender, e) => Kill(_proc);
 
-        while (true)
+        do 
         {
             
-            _proc = new ProcessWrapper(startInfo);
+            _proc = ctorProcessWrapper(startInfo);
             _proc.OutputDataReceived += (sender, e) => HandleOutput(new DataReceivedEventArgsWrapper(e).Data, console);
             _proc.ErrorDataReceived += (sender, e) => HandleError(new DataReceivedEventArgsWrapper(e), console);
 
@@ -21,17 +46,25 @@ public class ProcessManager
             _proc.BeginOutputReadLine();
             _proc.BeginErrorReadLine();
             await _proc.WaitForExitAsync();
-        }
+        }while (IsKilledByThisSoftware);
     }
 
-    internal void HandleOutput(string? data, IConsoleWrapper console)
+    internal async void HandleOutput(string? data, IConsoleWrapper console)
     {
         if (string.IsNullOrWhiteSpace(data)) return;
         if (_shouldWait)
         {
             _shouldWait = false;
+            if (_proc != null) { 
+                IsKilledByThisSoftware = !(_proc!.HasExited);
+            }
             Kill(_proc);
-            Thread.Sleep(15_000);
+            var valueTimeOut = options.TimeOut;
+            if (valueTimeOut.HasValue && valueTimeOut.Value>0)
+            {
+                console.MarkupLineInterpolated($"[bold green]Waiting {valueTimeOut.Value}[/]");
+                await Task.Delay(valueTimeOut.Value);
+            }
             return;
         }
 
@@ -42,7 +75,8 @@ public class ProcessManager
         {
             if (line.Contains("Started"))
             {
-                console.Clear();
+                if(options.ClearConsole.HasValue && options.ClearConsole.Value)
+                    console.Clear();
             }
         }
 

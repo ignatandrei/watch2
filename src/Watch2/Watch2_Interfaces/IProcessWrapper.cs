@@ -9,6 +9,7 @@ public interface IProcessWrapper
     void BeginOutputReadLine();
     void BeginErrorReadLine();
     Task WaitForExitAsync();
+    bool HasExited { get; }
 }
 
 

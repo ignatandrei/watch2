@@ -4,13 +4,24 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
   </PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="8.0.0" />
+		<PackageReference Include="rscgutils" Version="2024.2000.2000" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 		<PackageReference Include="Spectre.Console" Version="0.49.1" />
 	</ItemGroup>
 
 	<ItemGroup>
     <ProjectReference Include="..\Watch2_Interfaces\Watch2_Interfaces.csproj" />
   </ItemGroup>
+<ItemGroup>
+	<AdditionalFiles Include="options.gen.json" />
+</ItemGroup>
 
+	<PropertyGroup>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GX</CompilerGeneratedFilesOutputPath>
+	</PropertyGroup>
 </Project>
