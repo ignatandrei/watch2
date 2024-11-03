@@ -15,8 +15,8 @@ public sealed class TestFunctionalityMocked
         var mockDataReceivedEventArgs = new IDataReceivedEventArgsMakeExpectations();
         mockProcess.Methods.Kill().ExpectedCallCount(1);
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
-
-        var prc = (new ProcessManager());
+        Func<IProcessStartInfo, IProcessWrapper> f = (it => new ProcessWrapper(it));
+        var prc = (new ProcessManager(f, NullLogger<ProcessManager>.Instance));
         // Act
         prc.HandleOutput(("dotnet watch ❌ Could not find a MSBuild project file in 'D:\\gth\\watch2\\src\\Watch2'. Specify which project to use with the --project option."), mockConsole.Instance());
 
@@ -35,10 +35,12 @@ public sealed class TestFunctionalityMocked
         var mockDataReceivedEventArgs = new IDataReceivedEventArgsMakeExpectations();
         mockProcess.Methods.Kill().ExpectedCallCount ( 1);
         mockConsole.Methods.WriteLine(Rocks.Arg.Any<string>()).Callback(it=> { });
-        
+
+        Func<IProcessStartInfo, IProcessWrapper> f = (it => new ProcessWrapper(it));
+        var prc = (new ProcessManager(f, NullLogger<ProcessManager>.Instance));
 
         // Act
-        (new ProcessManager()).HandleOutput(("Waiting for a file to change before"), mockConsole.Instance());
+        prc.HandleOutput(("Waiting for a file to change before"), mockConsole.Instance());
 
         // Assert
         mockProcess.Verify();
@@ -55,7 +57,10 @@ public sealed class TestFunctionalityMocked
         mockConsole.Methods.Clear().ExpectedCallCount(1);
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
         // Act
-        (new ProcessManager()).HandleOutput("dotnet watch Started", mockConsole.Instance());
+        Func<IProcessStartInfo, IProcessWrapper> f = (it => new ProcessWrapper(it));
+        var prc = (new ProcessManager(f, NullLogger<ProcessManager>.Instance));
+
+        prc.HandleOutput("dotnet watch Started", mockConsole.Instance());
 
         // Assert
         mockConsole.Verify();

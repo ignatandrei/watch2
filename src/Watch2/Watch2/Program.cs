@@ -1,9 +1,9 @@
 //test
-//args = ["run --no-hot-reload"];
-//string folder = @"D:\gth\RSCG_Examples\v2\Generator";
+args = ["run --no-hot-reload"];
+string folder = @"D:\gth\RSCG_Examples\v2\Generator";
 
 //comment this line
-string folder = Environment.CurrentDirectory;
+//string folder = Environment.CurrentDirectory;
 
 var serviceCollection = new ServiceCollection();
 ConfigureServices(serviceCollection, folder);
