@@ -1,13 +1,9 @@
 //test
+//args = ["run --no-hot-reload"];
+//string folder = @"D:\gth\RSCG_Examples\v2\Generator";
 
-
-using NS_GeneratedJson_options_gen_json;
-
-args = ["run --no-hot-reload"];
-string folder = @"D:\gth\RSCG_Examples\v2\Generator";
-
-//comment this line
-//string folder = Environment.CurrentDirectory;
+//uncomment this line for production
+string folder = Environment.CurrentDirectory;
 
 var serviceCollection = new ServiceCollection();
 ConfigureServices(serviceCollection, folder);

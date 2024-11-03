@@ -9,7 +9,7 @@
 	  <WarningsNotAsErrors>NU1903</WarningsNotAsErrors>
   </PropertyGroup>
 	<PropertyGroup>
-		<Version>8.2024.1102.950</Version>
+		<Version>8.2024.1104.2013</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
