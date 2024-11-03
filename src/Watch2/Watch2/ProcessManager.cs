@@ -1,19 +1,36 @@
 ﻿namespace Watch2;
 public class ProcessManager
 {
-    public ProcessManager(Func<IProcessStartInfo,IProcessWrapper> ctorProcessWrapper,ILogger<ProcessManager> logger)
+    public ProcessManager(Func<IProcessStartInfo,IProcessWrapper> ctorProcessWrapper,ILogger<ProcessManager> logger,
+                Ioptions_gen_json options
+        )
     {
         this.ctorProcessWrapper = ctorProcessWrapper;
         this.logger = logger;
+        this.options = options;
     }
     private IProcessWrapper? _proc = null;
     private bool _shouldWait = false;
     private readonly Func<IProcessStartInfo, IProcessWrapper> ctorProcessWrapper;
     private readonly ILogger<ProcessManager> logger;
+    private readonly Ioptions_gen_json options;
 
     public bool IsKilledByThisSoftware { get; private set; } =false;
-    public async Task StartProcessAsync(string[] args, IConsoleWrapper console, IProcessStartInfo startInfo)
+    public async Task StartProcessAsync(string[] args, 
+        IConsoleWrapper console, 
+        IProcessStartInfo startInfo
+        )
     {
+        
+        var valid= options.Validate(new(this)).ToArray();
+        if(valid.Length > 0)
+        {
+            foreach (var item in valid)
+            {
+                console.MarkupLineInterpolated($"[bold red]{item.ErrorMessage}[/]");
+            }
+            return;
+        }
         Console.CancelKeyPress += (sender, e) => Kill(_proc);
 
         do 
@@ -53,6 +70,7 @@ public class ProcessManager
         {
             if (line.Contains("Started"))
             {
+
                 console.Clear();
             }
         }

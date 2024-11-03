@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-
+	  <WarningsNotAsErrors>NU1903</WarningsNotAsErrors>
   </PropertyGroup>
 	<PropertyGroup>
 		<Version>8.2024.1102.950</Version>
@@ -43,6 +43,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\..\..\README.md" Link="README.md" Pack="true" PackagePath="\" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="8.0.0" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<None Include="..\..\..\docs\ico.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
