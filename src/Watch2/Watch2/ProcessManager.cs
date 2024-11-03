@@ -1,8 +1,16 @@
 ﻿namespace Watch2;
 public class ProcessManager
 {
+    public ProcessManager(Func<IProcessStartInfo,IProcessWrapper> ctorProcessWrapper,ILogger<ProcessManager> logger)
+    {
+        this.ctorProcessWrapper = ctorProcessWrapper;
+        this.logger = logger;
+    }
     private IProcessWrapper? _proc = null;
     private bool _shouldWait = false;
+    private readonly Func<IProcessStartInfo, IProcessWrapper> ctorProcessWrapper;
+    private readonly ILogger<ProcessManager> logger;
+
     public bool IsKilledByThisSoftware { get; private set; } =false;
     public async Task StartProcessAsync(string[] args, IConsoleWrapper console, IProcessStartInfo startInfo)
     {
@@ -11,7 +19,7 @@ public class ProcessManager
         do 
         {
             
-            _proc = new ProcessWrapper(startInfo);
+            _proc = ctorProcessWrapper(startInfo);
             _proc.OutputDataReceived += (sender, e) => HandleOutput(new DataReceivedEventArgsWrapper(e).Data, console);
             _proc.ErrorDataReceived += (sender, e) => HandleError(new DataReceivedEventArgsWrapper(e), console);
 
