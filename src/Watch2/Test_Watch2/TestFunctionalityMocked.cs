@@ -58,7 +58,7 @@ public sealed class TestFunctionalityMocked
         var mockConsole = new IConsoleWrapperCreateExpectations();
         var mockDataReceivedEventArgs = new IDataReceivedEventArgsMakeExpectations();
         var mockOptions = new Ioptions_gen_jsonCreateExpectations();
-
+        mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
         mockConsole.Methods.Clear().ExpectedCallCount(1);
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
         // Act

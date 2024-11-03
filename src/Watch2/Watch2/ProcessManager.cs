@@ -49,7 +49,7 @@ public class ProcessManager
         }while (IsKilledByThisSoftware);
     }
 
-    internal void HandleOutput(string? data, IConsoleWrapper console)
+    internal async void HandleOutput(string? data, IConsoleWrapper console)
     {
         if (string.IsNullOrWhiteSpace(data)) return;
         if (_shouldWait)
@@ -59,7 +59,12 @@ public class ProcessManager
                 IsKilledByThisSoftware = !(_proc!.HasExited);
             }
             Kill(_proc);
-            Thread.Sleep(15_000);
+            var valueTimeOut = options.TimeOut;
+            if (valueTimeOut.HasValue && valueTimeOut.Value>0)
+            {
+                console.MarkupLineInterpolated($"[bold green]Waiting {valueTimeOut.Value}[/]");
+                await Task.Delay(valueTimeOut.Value);
+            }
             return;
         }
 
@@ -70,8 +75,8 @@ public class ProcessManager
         {
             if (line.Contains("Started"))
             {
-
-                console.Clear();
+                if(options.ClearConsole.HasValue && options.ClearConsole.Value)
+                    console.Clear();
             }
         }
 
