@@ -36,7 +36,7 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
         mockProcess.Methods
             .Kill()
             //TODO: the callback of this should make WaitForExitAsync true
-            .Callback()
+            //.Callback()
             .ExpectedCallCount(1);
         mockProcess.Methods
             .BeginOutputReadLine()
