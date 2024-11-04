@@ -5,8 +5,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-	  <WarningsNotAsErrors>NU1903</WarningsNotAsErrors>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	  <WarningsNotAsErrors>NU1903;CS0162</WarningsNotAsErrors>
   </PropertyGroup>
 	<PropertyGroup>
 		<Version>8.2024.1104.2136</Version>

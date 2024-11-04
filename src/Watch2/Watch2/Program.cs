@@ -4,8 +4,9 @@
 
 //uncomment this line for production
 Console.WriteLine($"Version:{Generated.Watch2.TheAssemblyInfo.GeneratedNameNice}");
-return;
+//return;
 string folder = Environment.CurrentDirectory;
+
 var fileJSON = Path.Combine(folder, "watch2.json");
 if (!File.Exists(fileJSON))
 {
@@ -24,8 +25,6 @@ var startInfo = serviceProvider.GetRequiredService<IProcessStartInfo>();
 var fileOptions = serviceProvider.GetRequiredService<IOptionsReader>();
 
 await processManager.StartProcessAsync(args, console, startInfo);
-
-
 
 void ConfigureServices(IServiceCollection services,string folder)
 {
