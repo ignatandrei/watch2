@@ -1,5 +1,5 @@
 {
   "version": 1,
   "ClearConsole": true,
-  "TimeOut": 1000
+  "TimeOut": 15000
 }

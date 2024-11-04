@@ -62,9 +62,9 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
 
         mockProcess.Properties.Getters
             .HasExited()
-            .ExpectedCallCount(1)
+            .ExpectedCallCount(2)
             .ReturnValue(false);
-
+    
 
         var mockConsole = new IConsoleWrapperCreateExpectations();
         mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });

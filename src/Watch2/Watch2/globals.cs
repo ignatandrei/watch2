@@ -10,4 +10,3 @@ global using NS_GeneratedJson_options_gen_json;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Test_Watch2")]
-
