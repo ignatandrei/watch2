@@ -1,26 +1,25 @@
 ﻿
+
+
 namespace Watch2_Implementations;
 
 public class ProcessWrapper : IProcessWrapper
 {
     private readonly Process _process;
 
+    public event EventHandler<string>? ErrDataReceived;
+    public event EventHandler<string>? OutDataReceived;
+
     public ProcessWrapper(IProcessStartInfo startInfo)
     {
         _process = new Process { StartInfo = startInfo.GetProcessStartInfo() };
+        _process.ErrorDataReceived += (sender, e) => ErrDataReceived?.Invoke(sender, e?.Data??"");
+        _process.OutputDataReceived += (sender, e) => OutDataReceived?.Invoke(sender, e?.Data??"");
     }
 
-    public event DataReceivedEventHandler OutputDataReceived
-    {
-        add => _process.OutputDataReceived += value;
-        remove => _process.OutputDataReceived -= value;
-    }
+    
 
-    public event DataReceivedEventHandler ErrorDataReceived
-    {
-        add => _process.ErrorDataReceived += value;
-        remove => _process.ErrorDataReceived -= value;
-    }
+    
 
     public void Start() => _process.Start();
     public void Kill() => _process.Kill(true);

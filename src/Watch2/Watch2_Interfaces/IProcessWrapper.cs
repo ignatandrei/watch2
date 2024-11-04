@@ -2,8 +2,8 @@
 
 public interface IProcessWrapper
 {
-    event DataReceivedEventHandler OutputDataReceived;
-    event DataReceivedEventHandler ErrorDataReceived;
+    event EventHandler<string>? OutDataReceived;
+    event EventHandler<string>? ErrDataReceived;
     void Start();
     void Kill();
     void BeginOutputReadLine();
@@ -11,5 +11,3 @@ public interface IProcessWrapper
     Task WaitForExitAsync();
     bool HasExited { get; }
 }
-
-

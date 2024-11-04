@@ -37,19 +37,27 @@ public class ProcessManager
         {
             
             _proc = ctorProcessWrapper(startInfo);
-            _proc.OutputDataReceived += (sender, e) => HandleOutput(new DataReceivedEventArgsWrapper(e).Data, console);
-            _proc.ErrorDataReceived += (sender, e) => HandleError(new DataReceivedEventArgsWrapper(e), console);
+            _proc.OutDataReceived += async (sender, e) => await HandleOutputMultipleLines(e, console);
+            _proc.ErrDataReceived += (sender, e) => HandleError(e, console);
 
             console.MarkupLineInterpolated($"[bold green]Starting...[/]");
             _proc.Start();
             console.Clear();
             _proc.BeginOutputReadLine();
             _proc.BeginErrorReadLine();
-            await _proc.WaitForExitAsync();
-        }while (IsKilledByThisSoftware);
+            await _proc.WaitForExitAsync();            
+        } while (IsKilledByThisSoftware);
     }
-
-    internal async void HandleOutput(string? data, IConsoleWrapper console)
+    internal async Task HandleOutputMultipleLines(string? data, IConsoleWrapper console)
+    {
+        if (string.IsNullOrWhiteSpace(data)) return;
+        var arrData=data.Split(new string[] { "\r\n","\r","\n" }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+        foreach (var line in arrData)
+        {
+            await HandleOutput(line, console);
+        }
+    }
+    internal async Task HandleOutput(string? data, IConsoleWrapper console)
     {
         if (string.IsNullOrWhiteSpace(data)) return;
         if (_shouldWait)
@@ -94,11 +102,12 @@ public class ProcessManager
         console.WriteLine("->" + line);
     }
 
-    internal void HandleError(IDataReceivedEventArgs e, IConsoleWrapper console)
+    internal void HandleError(string data, IConsoleWrapper console)
     {
-        if (e.Data != null)
+        if (string.IsNullOrWhiteSpace(data)) return;
+        if (data != null)
         {
-            console.MarkupLineInterpolated($"->[bold red]:cross_mark: {e.Data}[/]");
+            console.MarkupLineInterpolated($"->[bold red]:cross_mark: {data}[/]");
         }
     }
 
