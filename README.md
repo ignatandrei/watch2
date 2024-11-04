@@ -7,6 +7,10 @@
 
 Dotnet watch on steroids
 
+It can
+1. clear the console after each run 
+   
+2. wait before the watch process to start ( good if you have to run both tests and main program)
 
 ## NuGet Tool
 
@@ -26,4 +30,14 @@ You can use everywhere you use `dotnet watch` . Just replace `dotnet watch` with
 
 A watch2.json file is created in the current directory. You can modify it to your needs.
 
+```json
+{
+  "version": 1,
+  "ClearConsole": true,
+  "TimeOut": 15000
+}
+```
 
+- `ClearConsole` : if true, it will clear the console after each run
+- `TimeOut` : the time in milliseconds to wait for the process to start. 
+- `version` : the version of the file. Do not change it.
