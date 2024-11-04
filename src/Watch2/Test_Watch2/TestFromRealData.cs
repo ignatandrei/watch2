@@ -1,10 +1,12 @@
-﻿namespace Test_Watch2;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Test_Watch2;
 [TestClass]
 
 public class TestFromRealData
 {
     [TestMethod]
-    public void TestRSCGExamples()
+    public async Task TestRSCGExamples()
     {
         var outputString = $@"
 D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj
@@ -30,29 +32,63 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
         var lines = outputString.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
         var mockProcess = new IProcessWrapperCreateExpectations();
-        //mockProcess.AddRaiseEvent(
-        //    new RaiseEventInformation("OutputDataReceived", );
-        //    )
+        var mockProcessStartInfo = new IProcessStartInfoCreateExpectations();
+        mockProcess.Methods
+            .Kill()
+            //TODO: the callback of this should make WaitForExitAsync true
+            //.Callback()
+            .ExpectedCallCount(1);
+        mockProcess.Methods
+            .BeginOutputReadLine()
+            .ExpectedCallCount(1)
+            .RaiseOutDataReceived(outputString);
+        mockProcess.Methods
+            .BeginErrorReadLine()
+            .ExpectedCallCount(1)
+            ;
+        mockProcess.Methods
+            .Start()
+            .ExpectedCallCount(1)
+            
+            ;
+        mockProcess.Methods
+            .WaitForExitAsync()
+            .ExpectedCallCount(1)
+            .Callback(async() => {
+                await Task.Delay(60_000);
+            })
+            //.ReturnValue(Task.Delay(5_000))
+            ;
+
+        mockProcess.Properties.Getters
+            .HasExited()
+            .ExpectedCallCount(1)
+            .ReturnValue(false);
+
+
         var mockConsole = new IConsoleWrapperCreateExpectations();
+        mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
+        mockConsole.Methods.MarkupLineInterpolated(Arg.Any<FormattableString>()).Callback(it => { });
+        mockConsole.Methods.Clear().ExpectedCallCount(1);
+
         var mockOptions = new Ioptions_gen_jsonCreateExpectations();
         mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
         mockOptions.Properties.Getters.TimeOut().ExpectedCallCount(1).ReturnValue(1_000);
+        mockOptions.Methods.Validate(Arg.Any<ValidationContext>())
+            .ExpectedCallCount(1)
+            .ReturnValue([]);
 
-        mockProcess.Methods.Kill().ExpectedCallCount(1);
         
-        mockConsole.Methods.WriteLine(Arg.Any<string>()).Callback(it => { });
-        mockConsole.Methods.MarkupLineInterpolated(Arg.Any<FormattableString>()).Callback(it => { });
-
         var mockConsoleInstance = mockConsole.Instance();
-        Func<IProcessStartInfo, IProcessWrapper> f = (it => mockProcess.Instance());
+        var mockProcessInstance = mockProcess.Instance();
+        Func<IProcessStartInfo, IProcessWrapper> f = (it => mockProcessInstance);
         var p = (new ProcessManager(f, NullLogger<ProcessManager>.Instance,mockOptions.Instance()));
-        for (var i = 0; i < lines.Length; i++)
-        {
-            
-            p.HandleOutput(lines[i], mockConsoleInstance);
-            
-        }
+        var tStart =p.StartProcessAsync([""],mockConsoleInstance, mockProcessStartInfo.Instance())
+                
+            ;
         
+        var delay = Task.Delay(5_000);
+        await Task.WhenAny(tStart, delay);
         // Assert
         mockProcess.Verify();
     }
