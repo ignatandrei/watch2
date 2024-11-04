@@ -24,3 +24,6 @@ dotnet tool install --global Watch2
 
 You can use everywhere you use `dotnet watch` . Just replace `dotnet watch` with `dotnet watch2` .
 
+A watch2.json file is created in the current directory. You can modify it to your needs.
+
+
