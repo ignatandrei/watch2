@@ -8,9 +8,9 @@
 Dotnet watch on steroids
 
 
-## NuGet Package
+## NuGet Tool
 
-You can find the `Watch2` NuGet package [here](https://www.nuget.org/packages/Watch2).
+You can find the `Watch2` NuGet Tool [here](https://www.nuget.org/packages/Watch2).
 
 Install the package using the following command:
 
@@ -19,4 +19,8 @@ Install the package using the following command:
 dotnet tool install --global Watch2 
 
 ```
+
+## Usage
+
+You can use everywhere you use `dotnet watch` . Just replace `dotnet watch` with `dotnet watch2` .
 

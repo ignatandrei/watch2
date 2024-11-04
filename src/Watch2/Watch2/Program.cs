@@ -4,6 +4,11 @@
 
 //uncomment this line for production
 string folder = Environment.CurrentDirectory;
+var fileJSON = Path.Combine(folder, "watch2.json");
+if (File.Exists(fileJSON))
+{
+    File.WriteAllText(fileJSON, MyAdditionalFiles.options_gen_json);
+}
 
 var serviceCollection = new ServiceCollection();
 ConfigureServices(serviceCollection, folder);
@@ -15,11 +20,6 @@ var processManager = serviceProvider.GetRequiredService<ProcessManager>();
 var startInfo = serviceProvider.GetRequiredService<IProcessStartInfo>();
 
 var fileOptions = serviceProvider.GetRequiredService<IOptionsReader>();
-if(!fileOptions.ExistsFile())
-{
-    var file = Path.Combine(folder, "watch2.json");
-    File.WriteAllText(file, MyAdditionalFiles.options_gen_json);    
-}
 
 await processManager.StartProcessAsync(args, console, startInfo);
 
