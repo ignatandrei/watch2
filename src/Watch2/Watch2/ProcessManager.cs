@@ -62,9 +62,11 @@ public class ProcessManager
         await _proc.WaitForExitAsync();
         
     }
-
+    static int nrRunsStartAfter = 0;
     private void StartAfter( IConsoleWrapper console)
     {
+        Interlocked.Increment(ref nrRunsStartAfter);
+        if (nrRunsStartAfter > 1) return;
         if (!string.IsNullOrWhiteSpace(options.RunAfter))
         {
             try
@@ -126,7 +128,11 @@ public class ProcessManager
 
        
     }
-
+    public static long? ExtractNumber(string input)
+    {
+        var numericChars = new string(input.Where(char.IsDigit).ToArray());
+        return string.IsNullOrEmpty(numericChars) ? null : long.Parse(numericChars);
+    }
     private bool InterpretLine(IConsoleWrapper console, string line)
     {
         if (line.Contains("dotnet watch"))
@@ -167,9 +173,35 @@ public class ProcessManager
         }
         if(line.Contains("failed"))
         {
-            console.MarkupLineInterpolated($"->[bold red]: {line}[/]");
-            StartAfter(console);
-            return true;
+            var nr =ExtractNumber(line);
+            if (nr == null) return false;
+            if (nr == 0)
+            {
+                console.MarkupLineInterpolated($"->[bold green]: {line}[/]");
+                return true;
+
+            }
+            else
+            {
+                console.MarkupLineInterpolated($"->[bold red]: {line}[/]");
+                return true;
+            }
+        }
+        if (line.Contains("succeeded"))
+        {
+            var nr = ExtractNumber(line);
+            if (nr == null) return false;
+            if (nr == 0)
+            {
+                console.MarkupLineInterpolated($"->[bold red]: {line}[/]");
+                return true;
+
+            }
+            else
+            {
+                console.MarkupLineInterpolated($"->[bold green]: {line}[/]");
+                return true;
+            }
         }
 
         return false;

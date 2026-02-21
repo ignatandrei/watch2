@@ -1,7 +1,7 @@
 //test
 //args = ["run --no-hot-reload"];
 //string folder = @"D:\eu\GitHub\MovingDiagrams\src\MovingDiagrams\MD.DoNotRun";
-
+//string folder = @"D:\eu\GitHub\MovingDiagrams\src\MovingDiagrams\MD.Tests";
 //uncomment this line for production
 Console.WriteLine($"Version:{Generated.Watch2.TheAssemblyInfo.GeneratedNameNice}");
 //return;
