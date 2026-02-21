@@ -1,11 +1,11 @@
 //test
 //args = ["run --no-hot-reload"];
-string folder = @"D:\gth\RSCG_Examples\v2\Generator";
+//string folder = @"D:\gth\RSCG_Examples\v2\Generator";
 
 //uncomment this line for production
 Console.WriteLine($"Version:{Generated.Watch2.TheAssemblyInfo.GeneratedNameNice}");
 //return;
-//string folder = Environment.CurrentDirectory;
+string folder = Environment.CurrentDirectory;
 if((args?.Length??0) == 0)
 {
     args = ["run","--no-hot-reload","--no-restore"];
