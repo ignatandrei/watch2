@@ -1,12 +1,15 @@
 //test
 //args = ["run --no-hot-reload"];
-//string folder = @"D:\gth\RSCG_Examples\v2\Generator";
+string folder = @"D:\gth\RSCG_Examples\v2\Generator";
 
 //uncomment this line for production
 Console.WriteLine($"Version:{Generated.Watch2.TheAssemblyInfo.GeneratedNameNice}");
 //return;
-string folder = Environment.CurrentDirectory;
-
+//string folder = Environment.CurrentDirectory;
+if((args?.Length??0) == 0)
+{
+    args = ["run","--no-hot-reload","--no-restore"];
+}
 var fileJSON = Path.Combine(folder, "watch2.json");
 if (!File.Exists(fileJSON))
 {
@@ -24,7 +27,7 @@ var startInfo = serviceProvider.GetRequiredService<IProcessStartInfo>();
 
 var fileOptions = serviceProvider.GetRequiredService<IOptionsReader>();
 
-await processManager.StartProcessAsync(args, console, startInfo);
+await processManager.StartProcessAsync(args!, console, startInfo);
 
 void ConfigureServices(IServiceCollection services,string folder)
 {
@@ -40,7 +43,7 @@ void ConfigureServices(IServiceCollection services,string folder)
     services.AddSingleton<IProcessStartInfo>(provider => new ProcessStartInfoWrapper
     {
         FileName = "dotnet",
-        Arguments = "watch " + string.Join(' ', args),
+        Arguments = "watch " + string.Join(' ', args!),
         WorkingDirectory = folder,
         RedirectStandardOutput = true,  
         RedirectStandardInput = true,
