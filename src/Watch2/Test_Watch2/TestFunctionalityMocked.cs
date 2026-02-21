@@ -45,7 +45,7 @@ public sealed class TestFunctionalityMocked
 
         mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
         mockOptions.Properties.Getters.TimeOut().ExpectedCallCount(1).ReturnValue(1_000);
-
+        mockOptions.Properties.Getters.RunAfter().ExpectedCallCount(1).ReturnValue("");
         Func<IProcessStartInfo, IProcessWrapper> f = (it => new ProcessWrapper(it));
         var prc = (new ProcessManager(f, NullLogger<ProcessManager>.Instance,mockOptions.Instance()));
 

@@ -1,5 +1,6 @@
 {
   "version": 1,
   "ClearConsole": true,
-  "TimeOut": 15000
+  "TimeOut": 15000,
+  "RunAfter": "notepad.exe"
 }

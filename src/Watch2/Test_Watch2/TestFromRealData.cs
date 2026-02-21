@@ -48,7 +48,7 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
             ;
         mockProcess.Methods
             .Start()
-            .ExpectedCallCount(1)
+            .ExpectedCallCount(0)
             
             ;
         mockProcess.Methods
@@ -74,6 +74,7 @@ D:\gth\RSCG_Examples\v2\GeneratorData\GeneratorData.csproj : warning NU1903: Pac
         var mockOptions = new Ioptions_gen_jsonCreateExpectations();
         mockOptions.Properties.Getters.ClearConsole().ExpectedCallCount(1).ReturnValue(true);
         mockOptions.Properties.Getters.TimeOut().ExpectedCallCount(1).ReturnValue(1_000);
+        mockOptions.Properties.Getters.RunAfter().ExpectedCallCount(0).ReturnValue("");
         mockOptions.Methods.Validate(Arg.Any<ValidationContext>())
             .ExpectedCallCount(1)
             .ReturnValue([]);

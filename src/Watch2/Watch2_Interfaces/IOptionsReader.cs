@@ -12,5 +12,5 @@ public interface Ioptions_gen_json:IValidatableObject
     public int? Version { get; set; }
     public bool? ClearConsole { get; set; }
     public int? TimeOut { get; set; }
-
+    public string? RunAfter { get; set; }
 }
