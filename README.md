@@ -52,11 +52,11 @@ Let's say you have  3 dotnet watch for 3 projects ( a fast prototyping console, 
 
 The options here is put timeout different ( like 1 second =1000 for testproject , 3 seconds for console and 5 seconds for Blazor UI - or viceversa )
 
-You have below the diagram with .NET Watch 
+You have below the diagram with .NET Watch ( click on image or  refresh the page )
 
 ![Concurrent Watch](https://raw.githubusercontent.com/wiki/ignatandrei/watch2/images/ConcurrentWatch.svg "Concurrent Watch")
 
-and  below the diagram with Watch2 
+and  below the diagram with Watch2 ( click on image or  refresh the page)
 
 ![Wait Watch](https://raw.githubusercontent.com/wiki/ignatandrei/watch2/images/WaitWatch.svg "Wait Watch")
 
