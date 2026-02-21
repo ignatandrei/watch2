@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Test_Watch2/Test_Watch2.csproj" />
+  <Project Path="Watch2/Watch2.csproj" />
+  <Project Path="Watch2_Implementations/Watch2_Implementations.csproj" />
+  <Project Path="Watch2_Interfaces/Watch2_Interfaces.csproj" />
+</Solution>

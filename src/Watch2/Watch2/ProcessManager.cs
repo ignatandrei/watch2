@@ -39,10 +39,16 @@ public class ProcessManager
             _proc = ctorProcessWrapper(startInfo);
             _proc.OutDataReceived += async (sender, e) => await HandleOutputMultipleLines(e, console);
             _proc.ErrDataReceived += (sender, e) => HandleError(e, console);
-
-            console.MarkupLineInterpolated($"[bold green]Starting...[/]");
-            _proc.Start();
             console.Clear();
+            console.MarkupLineInterpolated($"[bold green]Starting...[/]");
+            var valueTimeOut = options.TimeOut;
+            if (valueTimeOut.HasValue && valueTimeOut.Value > 0)
+            {
+                console.MarkupLineInterpolated($"[bold green]Waiting {valueTimeOut.Value}[/]");
+                await Task.Delay(valueTimeOut.Value);
+            }
+            _proc.Start();
+            
             _proc.BeginOutputReadLine();
             _proc.BeginErrorReadLine();
             await _proc.WaitForExitAsync();            
@@ -63,12 +69,13 @@ public class ProcessManager
         if (_shouldWait)
         {
             _shouldWait = false;
-            if (_proc != null) { 
+            if (_proc != null)
+            {
                 IsKilledByThisSoftware = !(_proc!.HasExited);
             }
             Kill(_proc);
             var valueTimeOut = options.TimeOut;
-            if (valueTimeOut.HasValue && valueTimeOut.Value>0)
+            if (valueTimeOut.HasValue && valueTimeOut.Value > 0)
             {
                 console.MarkupLineInterpolated($"[bold green]Waiting {valueTimeOut.Value}[/]");
                 await Task.Delay(valueTimeOut.Value);
@@ -78,12 +85,19 @@ public class ProcessManager
 
         var line = data;
         if (line == null) return;
+        InterpretLine(console, line);
+        
 
+        console.WriteLine("->" + line);
+    }
+
+    private void InterpretLine(IConsoleWrapper console, string line)
+    {
         if (line.Contains("dotnet watch"))
         {
             if (line.Contains("Started"))
             {
-                if(options.ClearConsole.HasValue && options.ClearConsole.Value)
+                if (options.ClearConsole.HasValue && options.ClearConsole.Value)
                     console.Clear();
             }
         }
@@ -91,7 +105,7 @@ public class ProcessManager
         if (line.Contains(": error "))
         {
             console.MarkupLineInterpolated($"->[bold red]:cross_mark: {line}[/]");
-            return;
+            return ;
         }
 
         if (line.Contains("Waiting for a file to change before"))
@@ -99,7 +113,7 @@ public class ProcessManager
             _shouldWait = true;
         }
 
-        console.WriteLine("->" + line);
+        return ;
     }
 
     internal void HandleError(string data, IConsoleWrapper console)
@@ -107,6 +121,7 @@ public class ProcessManager
         if (string.IsNullOrWhiteSpace(data)) return;
         if (data != null)
         {
+            InterpretLine(console, data);
             console.MarkupLineInterpolated($"->[bold red]:cross_mark: {data}[/]");
         }
     }
