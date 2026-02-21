@@ -40,9 +40,6 @@ public class ProcessManager
                 _proc = ctorProcessWrapper(startInfo);
                 _proc.OutDataReceived += async (sender, e) => await HandleOutputMultipleLines(e, console);
                 _proc.ErrDataReceived += (sender, e) => HandleError(e, console);
-
-                console.MarkupLineInterpolated($"[bold green]Starting...[/]");
-                _proc.Start();
             }
             console.Clear();
             console.MarkupLineInterpolated($"[bold green]Starting...[/]");
