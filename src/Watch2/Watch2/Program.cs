@@ -3,7 +3,10 @@
 //string folder = @"D:\gth\RSCG_Examples\v2\Generator";
 
 //uncomment this line for production
+Console.WriteLine($"Version:{Generated.Watch2.TheAssemblyInfo.GeneratedNameNice}");
+//return;
 string folder = Environment.CurrentDirectory;
+
 var fileJSON = Path.Combine(folder, "watch2.json");
 if (!File.Exists(fileJSON))
 {
@@ -23,8 +26,6 @@ var fileOptions = serviceProvider.GetRequiredService<IOptionsReader>();
 
 await processManager.StartProcessAsync(args, console, startInfo);
 
-
-
 void ConfigureServices(IServiceCollection services,string folder)
 {
     services.AddSingleton<IFileProvider>(new PhysicalFileProvider(folder));
@@ -38,14 +39,14 @@ void ConfigureServices(IServiceCollection services,string folder)
     services.AddSingleton<ProcessManager, ProcessManager>();
     services.AddSingleton<IProcessStartInfo>(provider => new ProcessStartInfoWrapper
     {
-    FileName = "dotnet",
-    Arguments = "watch " + string.Join(' ', args),
-    WorkingDirectory = folder,
-    RedirectStandardOutput = true,
-    RedirectStandardInput = true,
-    RedirectStandardError = true,
-    UseShellExecute = false,
-    CreateNoWindow = true
+        FileName = "dotnet",
+        Arguments = "watch " + string.Join(' ', args),
+        WorkingDirectory = folder,
+        RedirectStandardOutput = true,  
+        RedirectStandardInput = true,
+        RedirectStandardError = true,
+        UseShellExecute = false,
+        CreateNoWindow = true
     });
 
     services.AddLogging(loggingBuilder =>
