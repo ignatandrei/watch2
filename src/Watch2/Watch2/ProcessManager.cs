@@ -32,13 +32,18 @@ public class ProcessManager
             return;
         }
         Console.CancelKeyPress += (sender, e) => Kill(_proc);
-
+        
         do 
         {
-            
-            _proc = ctorProcessWrapper(startInfo);
-            _proc.OutDataReceived += async (sender, e) => await HandleOutputMultipleLines(e, console);
-            _proc.ErrDataReceived += (sender, e) => HandleError(e, console);
+            if (_proc == null || _proc.HasExited)
+            {
+                _proc = ctorProcessWrapper(startInfo);
+                _proc.OutDataReceived += async (sender, e) => await HandleOutputMultipleLines(e, console);
+                _proc.ErrDataReceived += (sender, e) => HandleError(e, console);
+
+                console.MarkupLineInterpolated($"[bold green]Starting...[/]");
+                _proc.Start();
+            }
             console.Clear();
             console.MarkupLineInterpolated($"[bold green]Starting...[/]");
             var valueTimeOut = options.TimeOut;
@@ -79,6 +84,10 @@ public class ProcessManager
             {
                 console.MarkupLineInterpolated($"[bold green]Waiting {valueTimeOut.Value}[/]");
                 await Task.Delay(valueTimeOut.Value);
+                if (_proc !=null && _proc.HasExited)
+                {
+
+                }
             }
             return;
         }
